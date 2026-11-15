@@ -12,6 +12,10 @@ bike/
 │   └── <Brand> <Model> <Year>.png
 ```
 
+- Brand logos live in `logo/<brand>.png` at the repo root (`logo/honda.png`, `logo/royal enfield.png`, ...).
+  Matching to the brand folder is case/punctuation-insensitive and prefix-based, so `Harley-Davidson` finds `harley davidson.png`
+  and `Hero MotoCorp` finds `hero.png`. The garage shows the logos on the brand picker, the category chips and each bike card;
+  a brand without a logo shows a placeholder icon.
 - One folder per brand = one category in the app (Hero, Honda, Royal Enfield, Suzuki, TVS, Yamaha).
 - File name (without `.png`) is the label shown in the app.
 - Only `bike/<Brand>/<file>.png|jpg|jpeg|webp` is read. Anything else (README, deeper folders) is ignored.
@@ -32,9 +36,12 @@ Add `BikeGalleryGitHub.swift` (in the root of this repo) to the Xcode project, e
 ```swift
 let githubRepoLink = "https://github.com/<your-username>/<this-repo>"
 let imagesFolder   = "bike"
+let logosFolder    = "logo"
 ```
 
-Then show `BikeGalleryView()`. It lists categories from the folder names, filters by category, has search, and caches every image after the first download.
+Then show `BikeGalleryView { bike in ... }`; the closure receives the tapped bike (`bike.name`, `bike.category`, `bike.url`) so the garage can save it.
+Flow: brand logo grid -> tap a brand -> its bikes (logo chips at the top switch category, search works across all brands).
+Every image and logo is cached after the first download.
 
 ### How the URLs work
 
